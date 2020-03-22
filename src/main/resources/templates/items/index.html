@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http:/>/www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+
+</head>
+<body class="container">
+
+<h1>Scraped Items</h1>
+
+<nav th:replace="fragments :: navigation"></nav>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Rating</th>
+    </tr>
+    </thead>
+    <tr th:each="item : ${items}">
+        <td th:text="${item.title}"></td>
+        <td th:text="${item.rating}"></td>
+    </tr>
+</table>
+
+</body>
+</html>
