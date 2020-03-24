@@ -3,7 +3,6 @@ package org.jamie.capstone.models;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 public class ScrapeRequest {
@@ -31,4 +30,5 @@ public class ScrapeRequest {
     public int getId() {
         return id;
     }
+
 }

@@ -12,10 +12,8 @@ public class ScrapeItem {
     @GeneratedValue
     private int id;
 
-    @NotBlank
     private String title;
 
-    @NotBlank
     private String rating;
 
     public ScrapeItem(String title, String rating) {

@@ -1,9 +1,15 @@
 package org.jamie.capstone.controllers;
 
+import org.jamie.capstone.data.ScrapeRequestRepository;
+import org.jamie.capstone.models.Websites;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
 import org.jamie.capstone.data.ScrapeRepository;
+import org.jamie.capstone.data.ScrapeRequestRepository;
 import org.jamie.capstone.models.ScrapeItem;
 import org.jamie.capstone.models.ScrapeRequest;
-import org.jamie.capstone.models.Websites;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +20,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("items")
@@ -22,27 +30,50 @@ public class ScrapeController {
     @Autowired
     private ScrapeRepository scrapeRepository;
 
+    @Autowired
+    private ScrapeRequestRepository scrapeRequestRepository;
+
     @GetMapping("scrape")
-    public String displayScrapeForm (Model model) {
+    public String displayScrapeForm(Model model) {
         model.addAttribute("title", "Choose Website");
         model.addAttribute(new ScrapeRequest());
+        model.addAttribute("websites", Websites.values());
         return "items/scrape";
     }
 
     @PostMapping("scrape")
-    public String processScrapeForm (@ModelAttribute @Valid ScrapeRequest newScrapeRequest,
-                                     Errors errors, Model model) {
+    public String processScrapeForm(@ModelAttribute @Valid ScrapeRequest newScrapeRequest, ScrapeItem newScrapeItem,
+                                    Errors errors, Model model) throws IOException {
 
-        if(errors.hasErrors()) {
+        if (errors.hasErrors()) {
             model.addAttribute("title", "Choose Website");
+            model.addAttribute("scrapeRequest", newScrapeRequest);
             return "items/scrape";
         }
 
+        scrapeRequestRepository.save(newScrapeRequest);
 
+        String url = newScrapeRequest.getWebsite().getWebsite();
+        Document page = Jsoup.connect(url).get();
 
-
-
+        if (url.contains("imdb")) {
+            for (Element row : page.select("table.chart.full-width tr")) {
+                final String title = row.select(".titleColumn a").text();
+                final String rating = row.select(".ratingColumn.imdbRating").text();
+                model.addAttribute("scrapeItem", newScrapeItem = new ScrapeItem(title, rating));
+                scrapeRepository.save(newScrapeItem);
+            }
+        } else if (url.contains("rotten")) {
+            for (Element row : page.select("table.movie_list tr")) {
+                final String title = row.select(".middle_col a").text();
+                final String rating = row.select(".left_col span.tMeterScore").text();
+                model.addAttribute("scrapeItem", newScrapeItem = new ScrapeItem(title, rating));
+                scrapeRepository.save(newScrapeItem);
+            }
+        }
+        return "redirect:../";
     }
+}
 
 
     /*@PostMapping("index")
@@ -52,4 +83,4 @@ public class ScrapeController {
 
 
 
-}
+

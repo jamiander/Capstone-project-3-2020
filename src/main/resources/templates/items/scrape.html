@@ -10,7 +10,12 @@
 <form method="post" action="/items/scrape">
     <div class="form-group">
         <label>Website
-            <input th:field="${scrapeRequest.website}" class="form-control">
+            <select th:field="${scrapeRequest.website}">
+                <option th:each="website : ${websites}" class="form-control"
+                    th:value="${website}"
+                    th:text="${website}">
+                </option>
+            </select>
         </label>
         <p class="error" th:errors="${scrapeRequest.website}"></p>
     </div>
