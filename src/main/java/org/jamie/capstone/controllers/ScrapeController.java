@@ -59,15 +59,15 @@ public class ScrapeController {
         if (url.contains("imdb")) {
             for (Element row : page.select("table.chart.full-width tr")) {
                 final String title = row.select(".titleColumn a").text();
-                final String rating = row.select(".ratingColumn.imdbRating").text();
-                model.addAttribute("scrapeItem", newScrapeItem = new ScrapeItem(title, rating));
+                final String content = row.select(".ratingColumn.imdbRating").text();
+                model.addAttribute("scrapeItem", newScrapeItem = new ScrapeItem(title, content));
                 scrapeRepository.save(newScrapeItem);
             }
-        } else if (url.contains("rotten")) {
-            for (Element row : page.select("table.movie_list tr")) {
-                final String title = row.select(".middle_col a").text();
-                final String rating = row.select(".left_col span.tMeterScore").text();
-                model.addAttribute("scrapeItem", newScrapeItem = new ScrapeItem(title, rating));
+        } else if (url.contains("reddit")) {
+            for (Element row : page.select("ul.rows.result-info")) {
+                final String title = row.select(".result-title.hdrlnk").text();
+                final String content = row.select(".result-meta.result-price").text();
+                model.addAttribute("scrapeItem", newScrapeItem = new ScrapeItem(title, content));
                 scrapeRepository.save(newScrapeItem);
             }
         }
@@ -76,10 +76,6 @@ public class ScrapeController {
 }
 
 
-    /*@PostMapping("index")
-    public String displayScrapeItems ()
-    scrapeRepository.save(newScrapeItem);
-        return "redirect:../";*/
 
 
 

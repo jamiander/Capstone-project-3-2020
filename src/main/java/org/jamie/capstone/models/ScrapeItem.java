@@ -14,11 +14,11 @@ public class ScrapeItem {
 
     private String title;
 
-    private String rating;
+    private String content;
 
-    public ScrapeItem(String title, String rating) {
+    public ScrapeItem(String title, String content) {
         this.title = title;
-        this.rating = rating;
+        this.content = content;
     }
 
     public ScrapeItem() {}
@@ -31,12 +31,12 @@ public class ScrapeItem {
         this.title = title;
     }
 
-    public String getRating() {
-        return rating;
+    public String getContent() {
+        return content;
     }
 
-    public void setRating(String rating) {
-        this.rating = rating;
+    public void setRating(String content) {
+        this.content = content;
     }
 
     public int getId() {
