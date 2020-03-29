@@ -64,9 +64,10 @@ public class ScrapeController {
                 scrapeRepository.save(newScrapeItem);
             }
         } else if (url.contains("reddit")) {
-            for (Element row : page.select("ul.rows.result-info")) {
-                final String title = row.select(".result-title.hdrlnk").text();
-                final String content = row.select(".result-meta.result-price").text();
+            for (Element row : page.select("._2SdHzo12ISmrC8H86TgSCp._3wqmjmv3tb_k-PROt7qFZe"))
+            {
+                final String title = row.select("h3").text();
+                final String content = row.select("href").text();
                 model.addAttribute("scrapeItem", newScrapeItem = new ScrapeItem(title, content));
                 scrapeRepository.save(newScrapeItem);
             }
