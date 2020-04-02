@@ -59,7 +59,7 @@ public class ScrapeController {
         if (url.contains("imdb")) {
             for (Element row : page.select("table.chart.full-width tr")) {
                 final String title = row.select(".titleColumn a").text();
-                final String content = row.select(".ratingColumn.imdbRating").text();
+                final String content = row.absUrl("src");
                 model.addAttribute("scrapeItem", newScrapeItem = new ScrapeItem(title, content));
                 scrapeRepository.save(newScrapeItem);
             }
